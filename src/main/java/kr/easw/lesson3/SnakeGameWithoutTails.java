@@ -49,7 +49,40 @@ public class SnakeGameWithoutTails {
      * 만약 사용자의 입력이 종료(0)였다면, false값을 반환하여 게임을 종료해야 합니다.
      */
     private static boolean nextDirection(String keyword) {
-        throw new RuntimeException("이 코드 라인을 지우고, 이곳에서 작성하십시오.");
+        int newX = location.getX();
+        int newY = location.getY();
+        
+        switch (keyword) {
+            case "r":
+                newY++;
+                break;
+            case "l":
+                newY--;
+                break;
+            case "u":
+                newX--;
+                break;
+            case "d":
+                newX++;
+                break;
+            case "0":
+                return false;
+            default:
+                System.out.println("잘못된 입력입니다.");
+                return true;
+        }
+
+        newX = Math.max(0, Math.min(BOARD_SIZE - 1, newX));
+        newY = Math.max(0, Math.min(BOARD_SIZE - 1, newY));
+
+        location = new SnakeLocation(newX, newY);
+
+        if (board[newX][newY] == 2) {
+            score++;
+            board[newX][newY] = 0;
+        }
+
+        return true;
     }
 
     private static void printBoard() {
@@ -70,7 +103,7 @@ public class SnakeGameWithoutTails {
                         System.out.print("◼");
                         break;
                     case 2:
-                        System.out.println("* ");
+                        System.out.print("* ");
                         break;
                 }
             }
@@ -84,7 +117,7 @@ public class SnakeGameWithoutTails {
         for (int i = 0; i < toPlace; i++) {
             int retry = 0;
             while (retry < 5) {
-                SnakeLocation locate = new SnakeLocation(RANDOM.nextInt() * BOARD_SIZE, RANDOM.nextInt() * BOARD_SIZE);
+            	 SnakeLocation locate = new SnakeLocation((int) (RANDOM.nextDouble() * (BOARD_SIZE - 1)), (int) (RANDOM.nextDouble() * (BOARD_SIZE - 1)));
                 if (board[locate.getX()][locate.getY()] != 0) {
                     retry++;
                     continue;
